@@ -909,14 +909,12 @@ static u32 SelectNextMoveIndex(u16 species)
     switch (callCount)
     {
     case 1:
-        return 15;
+        return 21;
 
     case 2:
         return 54;
 
-    case 3:
-        return 58;
-    }
+     }
 
     return 0;
 }
@@ -949,7 +947,7 @@ u32 RogueGift_CreateDynamicMonId(u8 rarity, u16 species)
     switch (RogueRandom() % 2)
     {
     case 0:
-        compressedDataUntyped.format = COMPRESSED_FORMAT_ORIGINAL;
+        compressedDataUntyped.format = COMPRESSED_FORMAT_MON_TYPE;
         break;
 
     case 1:
