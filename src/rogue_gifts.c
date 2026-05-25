@@ -224,7 +224,7 @@ static u16 const sDynamicCustomMonMoves[] =
     MOVE_REVELATION_DANCE,
     MOVE_SUCKER_PUNCH,
     MOVE_COLLISION_COURSE,
-    MOVE_TACKLE,
+    MOVE_ROLLOUT,
     MOVE_FURY_CUTTER,
     MOVE_LAST_RESPECTS,
     MOVE_ACROBATICS,
@@ -518,16 +518,17 @@ static void UncompressDynamicMonData(u32 customMonId, struct DynamicMonData* out
     {
         struct CompressedDynamicData_MonType* compressedData = (struct CompressedDynamicData_MonType*)compressedUntyped;
 
-        compressedData->ability = 17; // index Psychic Surge trong list +1
-        
-        compressedData->type = TYPE_NORMAL;
-        
-        // move1 = Spore
-    compressedData->move1 = 21; // Spore index +1
+        outData->ability = ((compressedData->ability - 1) < ARRAY_COUNT(sDynamicCustomMonAbilities)) ? sDynamicCustomMonAbilities[compressedData->ability - 1] : ABILITY_NONE;
 
-    // move2 = Moongeist Beam
-    compressedData->move2 = 54; // Moongeist Beam index +1
+        outData->types[compressedData->typeSlot] = compressedData->type;
+        
+        outData->moves[outData->movesCount++] = SelectTypeBasedExtraMove(compressedData->type, compressedData->typeMoveFlip);
 
+        if(compressedData->move1 != 0 && (compressedData->move1 - 1) < ARRAY_COUNT(sDynamicCustomMonMoves))
+            outData->moves[outData->movesCount++] = sDynamicCustomMonMoves[compressedData->move1 - 1];
+
+        if(compressedData->move2 != 0 && (compressedData->move2 - 1) < ARRAY_COUNT(sDynamicCustomMonMoves))
+            outData->moves[outData->movesCount++] = sDynamicCustomMonMoves[compressedData->move2 - 1];
     }
     else
     {
@@ -901,50 +902,25 @@ void RogueGift_CreateMon(u32 customMonId, struct Pokemon* mon, u16 species, u8 l
 
 static u32 SelectNextMoveIndex(u16 species)
 {
-    if(RogueMiscQuery_AnyActiveElements())
-    {
-        u32 i;
-        u16 moveId = RogueMiscQuery_SelectRandomElement(Random());
-        RogueMiscQuery_EditElement(QUERY_FUNC_EXCLUDE, moveId);
+   // Lần gọi đầu tiên -> trả về 29
+    if (compressedData->move1 == 0)
+        return 21;
 
-        for (i = 0; i < ARRAY_COUNT(sDynamicCustomMonMoves); i++)
-        {
-            if(sDynamicCustomMonMoves[i] == moveId)
-                return 1 + i;
-        }
+    // Lần gọi thứ hai -> trả về 15
+    if (compressedData->move2 == 0)
+        return 54;
 
-        // Should never get here
-        AGB_ASSERT(FALSE);
-        return 1;
-    }
+    // Lần gọi thứ ba -> trả về 127
+    if (compressedData->move3 == 0)
+        return 52;
 
-    // Can get here if we've ran out of move options, as everything else is already known
+    // Không còn move nào để chọn
     return 0;
 }
 
 static u32 SelectNextAbilityIndex(u16 species)
 {
-    u8 i;
-
-    // Give the mon a new ability for it
-    while(TRUE)
-    {
-        u32 idx = (Random() % ARRAY_COUNT(sDynamicCustomMonAbilities));
-
-        for(i = 0; i < NUM_ABILITY_SLOTS; ++i)
-        {
-            if(GetAbilityBySpecies(species, i, 0) == sDynamicCustomMonAbilities[idx])
-            {
-                idx = 10000;
-                break;
-            }
-        }
-
-        if(idx != 10000)
-            return 1 + idx;
-    }
-
-    return 0;
+    return 15;
 }
 
 static u32 SelectRandomType(u16 species, u8 index)
