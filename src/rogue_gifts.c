@@ -918,9 +918,6 @@ static u32 SelectNextMoveIndex(struct CompressedDynamicData* compressedData, u16
     return 0;
 }
 
-    // Can get here if we've ran out of move options, as everything else is already known
-    return 0;
-}
 
 static u32 SelectNextAbilityIndex(struct CompressedDynamicData* compressedData, u16 species)
 {   
@@ -989,18 +986,18 @@ u32 RogueGift_CreateDynamicMonId(u8 rarity, u16 species)
         switch (rarity)
         {
         case UNIQUE_RARITY_COMMON:
-            compressedData->move1 = SelectNextMoveIndex(species);
-            compressedData->move2 = SelectNextMoveIndex(species);
+            compressedData->move1 = SelectNextMoveIndex(compressedData, species);
+            compressedData->move2 = SelectNextMoveIndex(compressedData, species);
             break;
 
         case UNIQUE_RARITY_RARE:
-            compressedData->move1 = SelectNextMoveIndex(species);
+            compressedData->move1 = SelectNextMoveIndex(compressedData, species);
             compressedData->ability = SelectNextAbilityIndex(species);
             break;
 
         case UNIQUE_RARITY_EPIC:
-            compressedData->move1 = SelectNextMoveIndex(species);
-            compressedData->move2 = SelectNextMoveIndex(species);
+            compressedData->move1 = SelectNextMoveIndex(compressedData, species);
+            compressedData->move2 = SelectNextMoveIndex(compressedData, species);
             compressedData->move3 = SelectNextMoveIndex(species);
             //compressedData.move4 = SelectNextMoveIndex(species);
             compressedData->ability = SelectNextAbilityIndex(species);
@@ -1025,14 +1022,14 @@ u32 RogueGift_CreateDynamicMonId(u8 rarity, u16 species)
 
         case UNIQUE_RARITY_RARE:
             compressedData->type = SelectRandomType(species, compressedData->typeSlot);
-            compressedData->move1 = SelectNextMoveIndex(species);
-            compressedData->move2 = SelectNextMoveIndex(species);
+            compressedData->move1 = SelectNextMoveIndex(compressedData, species);
+            compressedData->move2 = SelectNextMoveIndex(compressedData, species);
             break;
 
         case UNIQUE_RARITY_EPIC:
             compressedData->type = SelectRandomType(species, compressedData->typeSlot);
-            compressedData->move1 = SelectNextMoveIndex(species);
-            compressedData->move2 = SelectNextMoveIndex(species);
+            compressedData->move1 = SelectNextMoveIndex(compressedData, species);
+            compressedData->move2 = SelectNextMoveIndex(compressedData, species);
             compressedData->ability = SelectNextAbilityIndex(species);
             break;
 
