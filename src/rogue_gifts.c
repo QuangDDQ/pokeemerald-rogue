@@ -518,17 +518,16 @@ static void UncompressDynamicMonData(u32 customMonId, struct DynamicMonData* out
     {
         struct CompressedDynamicData_MonType* compressedData = (struct CompressedDynamicData_MonType*)compressedUntyped;
 
-        outData->ability = ((compressedData->ability - 1) < ARRAY_COUNT(sDynamicCustomMonAbilities)) ? sDynamicCustomMonAbilities[compressedData->ability - 1] : ABILITY_NONE;
-
-        outData->types[compressedData->typeSlot] = compressedData->type;
+        compressedData->ability = 17; // index Psychic Surge trong list +1
         
-        outData->moves[outData->movesCount++] = SelectTypeBasedExtraMove(compressedData->type, compressedData->typeMoveFlip);
+        compressedData->type = TYPE_NORMAL;
+        
+        // move1 = Spore
+    compressedData->move1 = 21; // Spore index +1
 
-        if(compressedData->move1 != 0 && (compressedData->move1 - 1) < ARRAY_COUNT(sDynamicCustomMonMoves))
-            outData->moves[outData->movesCount++] = sDynamicCustomMonMoves[compressedData->move1 - 1];
+    // move2 = Moongeist Beam
+    compressedData->move2 = 54; // Moongeist Beam index +1
 
-        if(compressedData->move2 != 0 && (compressedData->move2 - 1) < ARRAY_COUNT(sDynamicCustomMonMoves))
-            outData->moves[outData->movesCount++] = sDynamicCustomMonMoves[compressedData->move2 - 1];
     }
     else
     {
