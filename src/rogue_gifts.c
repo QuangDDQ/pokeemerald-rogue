@@ -900,52 +900,31 @@ void RogueGift_CreateMon(u32 customMonId, struct Pokemon* mon, u16 species, u8 l
     }
 }
 
-static u32 SelectNextMoveIndex(u16 species)
+static u32 SelectNextMoveIndex(struct CompressedDynamicData* compressedData, u16 species)
 {
-    if(RogueMiscQuery_AnyActiveElements())
-    {
-        u32 i;
-        u16 moveId = RogueMiscQuery_SelectRandomElement(Random());
-        RogueMiscQuery_EditElement(QUERY_FUNC_EXCLUDE, moveId);
+    // Lần gọi đầu tiên -> trả về 29
+    if (compressedData->move1 == 0)
+        return 21;
 
-        for (i = 0; i < ARRAY_COUNT(sDynamicCustomMonMoves); i++)
-        {
-            if(sDynamicCustomMonMoves[i] == moveId)
-                return 1 + i;
-        }
+    // Lần gọi thứ hai -> trả về 15
+    if (compressedData->move2 == 0)
+        return 54;
 
-        // Should never get here
-        AGB_ASSERT(FALSE);
-        return 1;
-    }
+    // Lần gọi thứ ba -> trả về 127
+    if (compressedData->move3 == 0)
+        return 52;
+
+    // Không còn move nào để chọn
+    return 0;
+}
 
     // Can get here if we've ran out of move options, as everything else is already known
     return 0;
 }
 
-static u32 SelectNextAbilityIndex(u16 species)
-{
-    u8 i;
-
-    // Give the mon a new ability for it
-    while(TRUE)
-    {
-        u32 idx = (Random() % ARRAY_COUNT(sDynamicCustomMonAbilities));
-
-        for(i = 0; i < NUM_ABILITY_SLOTS; ++i)
-        {
-            if(GetAbilityBySpecies(species, i, 0) == sDynamicCustomMonAbilities[idx])
-            {
-                idx = 10000;
-                break;
-            }
-        }
-
-        if(idx != 10000)
-            return 1 + idx;
-    }
-
-    return 0;
+static u32 SelectNextAbilityIndex(struct CompressedDynamicData* compressedData, u16 species)
+{   
+    return 15;
 }
 
 static u32 SelectRandomType(u16 species, u8 index)
