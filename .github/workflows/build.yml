@@ -73,6 +73,14 @@ jobs:
           RELEASE: 1
         run: make -j${nproc} -O all
 
+      - name: Upload ROM
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-rom
+          path: |
+            *.gba
+            *.elf   
+
       - name: Update Memory Stats
         uses: actions/upload-artifact@v4
         with:
