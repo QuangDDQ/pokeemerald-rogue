@@ -901,7 +901,9 @@ void RogueGift_CreateMon(u32 customMonId, struct Pokemon* mon, u16 species, u8 l
 }
 
 static u32 SelectNextMoveIndex(struct CompressedDynamicData* compressedData, u16 species)
-{
+{    
+    struct CompressedDynamicData_Original* compressedData =
+        (struct CompressedDynamicData_Original*)compressedDataUntyped;
     // Lần gọi đầu tiên -> trả về 29
     if (compressedData->move1 == 0)
         return 21;
