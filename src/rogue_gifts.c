@@ -956,10 +956,10 @@ u32 RogueGift_CreateDynamicMonId(u8 rarity, u16 species)
     }
 
     // Lock this behind upgrade
-    if(compressedDataUntyped.format == COMPRESSED_FORMAT_MON_TYPE && !RogueHub_HasUpgrade(HUB_UPGRADE_LAB_UNIQUE_TYPINGS))
-    {
-        compressedDataUntyped.format = COMPRESSED_FORMAT_ORIGINAL;
-    }
+    //if(compressedDataUntyped.format == COMPRESSED_FORMAT_MON_TYPE && !RogueHub_HasUpgrade(HUB_UPGRADE_LAB_UNIQUE_TYPINGS))
+    //{
+    //    compressedDataUntyped.format = COMPRESSED_FORMAT_ORIGINAL;
+    //}
 
     // Start query with moves which are valid
     RogueCustomQuery_Begin();
