@@ -1100,13 +1100,11 @@ static u8 RandomRarity()
 
     case 3:
     case 4:
-        rarity = UNIQUE_RARITY_RARE;
-        break;
+       
     
     case 5:
     case 6:
-        rarity = UNIQUE_RARITY_COMMON;
-        break;
+   
 
     default:
         AGB_ASSERT(FALSE);
