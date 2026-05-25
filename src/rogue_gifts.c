@@ -1012,7 +1012,7 @@ u32 RogueGift_CreateDynamicMonId(u8 rarity, u16 species)
     {
         struct CompressedDynamicData_MonType* compressedData = (struct CompressedDynamicData_MonType*)&compressedDataUntyped;
         compressedData->typeSlot = Random() % 1;
-        compressedData->typeMoveFlip = Random() % 1;
+        compressedData->typeMoveFlip = Random() % 2;
 
         switch (rarity)
         {
@@ -1092,10 +1092,7 @@ static u8 RandomRarity()
 
     switch (Random() % 7)
     {
-    case 0:
-        rarity = UNIQUE_RARITY_EXOTIC;
-        break;
-
+    case 0:    
     case 1:
     case 2:
         rarity = UNIQUE_RARITY_EPIC;
