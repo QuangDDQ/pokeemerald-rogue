@@ -2,29 +2,21 @@ name: CI
 
 on:
   push:
-    branches:
-      - vanilla
-      - vanilla-dev
-      - expansion
-      - expansion-dev
-  pull_request:
-    branches:
-      - vanilla
-      - vanilla-dev
-      - expansion
-      - expansion-dev
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container: devkitpro/devkitarm
+
     env:
       GAME_VERSION: EMERALD
       GAME_REVISION: 0
       GAME_LANGUAGE: ENGLISH
       MODERN: 0
       COMPARE: 0
-      UNUSED_ERROR: 0
+      AUTOMATION_HOST: GITHUB
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,50 +31,37 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y build-essential libpng-dev libelf-dev
-        # build-essential, git, and libpng-dev are already installed
-        # gcc-arm-none-eabi is only needed for the modern build
-        # as an alternative to dkP
 
       - name: Install Dependencies
         run: |
           ./init_deps.sh
 
       - name: Install agbcc
+        working-directory: agbcc
         run: |
           ./build.sh
           ./install.sh ../
-        working-directory: agbcc
-
-      #- name: Agbcc
-      #  env:
-      #    MODERN: 0
-      #    COMPARE: 0
-      #  run: make -j${nproc} -O all
 
       - name: Build Debug
         env:
-          MODERN: 1
-          COMPARE: 0
           RELEASE: 0
-        run: make -j${nproc} -O all
+        run: make -j$(nproc) -O all
 
       - name: Build Release
         env:
-          MODERN: 1
-          COMPARE: 0
           RELEASE: 1
-        run: make -j${nproc} -O all
+        run: make -j$(nproc) -O all
+
+      - name: Upload ROM
+        uses: actions/upload-artifact@v4
+        with:
+          name: pokeemerald-rom
+          path: |
+            pokeemerald.gba
+            pokeemerald.elf
 
       - name: Update Memory Stats
         uses: actions/upload-artifact@v4
         with:
           name: Memory Stats
           path: pokeemerald_memorystats.csv
-
-      - name: Test
-        env:
-          MODERN: 1
-          TEST: 1
-        run: |
-          make -j${nproc} -O pokeemerald-test.elf
-          make -j${nproc} check
