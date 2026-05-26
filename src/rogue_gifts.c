@@ -909,10 +909,10 @@ static u32 SelectNextMoveIndex(u16 species)
     switch (callCount)
     {
     case 1:
-        return 21;
+        return 14;
 
     case 2:
-        return 54;
+        return 33;
 
      }
 
@@ -921,7 +921,7 @@ static u32 SelectNextMoveIndex(u16 species)
 
 static u32 SelectNextAbilityIndex(u16 species)
 {
-    return 15;
+    return 30;
 }
 
 static u32 SelectRandomType(u16 species, u8 index)
