@@ -921,7 +921,7 @@ static u32 SelectNextMoveIndex(u16 species)
 
 static u32 SelectNextAbilityIndex(u16 species)
 {
-    return 47;
+    return 19;
 }
 
 static u32 SelectRandomType(u16 species, u8 index)
@@ -1108,7 +1108,7 @@ static u8 RandomRarity()
 
     default:
         AGB_ASSERT(FALSE);
-        rarity = UNIQUE_RARITY_COMMON;
+        rarity = UNIQUE_RARITY_EPIC;
         break;
     }
 
